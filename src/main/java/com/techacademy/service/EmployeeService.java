@@ -13,6 +13,7 @@ import com.techacademy.constants.ErrorKinds;
 import com.techacademy.entity.Employee;
 import com.techacademy.repository.EmployeeRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class EmployeeService {
@@ -118,7 +119,7 @@ public class EmployeeService {
 
     //従業員更新
     @Transactional
-    public ErrorKinds update(Employee employee) {
+    public ErrorKinds update(Employee employee, String code) {
         
         ErrorKinds result = employeePasswordCheck(employee);
         if (ErrorKinds.CHECK_OK != result) {
@@ -128,7 +129,8 @@ public class EmployeeService {
         employee.setDeleteFlg(false);
 
         LocalDateTime now = LocalDateTime.now();
-        employee.getCreatedAt();
+        LocalDateTime createTime = findByCode(code).getCreatedAt();
+        employee.setCreatedAt(createTime);
         employee.setUpdatedAt(now);
 
         employeeRepository.save(employee);
@@ -137,10 +139,17 @@ public class EmployeeService {
     
     //従業員更新(空白)
     @Transactional
-    public Employee updateBlank(Employee employee) {
+    public Employee updateBlank(Employee employee, String code) {
+        
+        Employee employee_before = findByCode(code);
+        String password_before = employee_before.getPassword();
+        String password_now = employee.getPassword();
+        
+        password_now = password_before;
         
         LocalDateTime now = LocalDateTime.now();
-        employee.getCreatedAt();
+        LocalDateTime createTime = employee_before.getCreatedAt();
+        employee.setCreatedAt(createTime);
         employee.setUpdatedAt(now);
 
         return employeeRepository.save(employee);

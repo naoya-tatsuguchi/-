@@ -1,5 +1,6 @@
 package com.techacademy.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -122,29 +123,25 @@ public class EmployeeController {
 
     @PostMapping("/{code}/update")
     public String update(@PathVariable String code, @Validated Employee employee, BindingResult res, Model model) {
-        Employee employee_before = employeeService.findByCode(code);
-        String password_before = employee_before.getPassword();
-        String password_now = employee.getPassword();
-        
+
         if (res.hasErrors()) {
             model.addAttribute("employee", employee);
             return "employees/update";
         }
-        
-        if("".equals(password_now)) {
-            password_now = password_before;
-            employeeService.updateBlank(employee);
+
+        if("".equals(employee.getPassword())) {
+            employeeService.updateBlank(employee, code);
             return "redirect:/employees";
         }
-        
-        ErrorKinds result = employeeService.update(employee);
-        
+
+        ErrorKinds result = employeeService.update(employee, code);
+
         if (ErrorMessage.contains(result)) {
             model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
             return edit(code, employee, model);
         }
-        
-    
+
+
         return "redirect:/employees";
     }
 }
