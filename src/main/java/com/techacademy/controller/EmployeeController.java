@@ -137,7 +137,6 @@ public class EmployeeController {
             return "redirect:/employees";
         }
         
-        try {
         ErrorKinds result = employeeService.update(employee);
         
         if (ErrorMessage.contains(result)) {
@@ -145,11 +144,6 @@ public class EmployeeController {
             return edit(code, employee, model);
         }
         
-        } catch (DataIntegrityViolationException e) {
-            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
-                    ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-            return edit(code, employee, model);
-        }
     
         return "redirect:/employees";
     }

@@ -128,7 +128,7 @@ public class EmployeeService {
         employee.setDeleteFlg(false);
 
         LocalDateTime now = LocalDateTime.now();
-        employee.setCreatedAt(now);
+        //employee.setCreatedAt(now);
         employee.setUpdatedAt(now);
 
         employeeRepository.save(employee);
@@ -140,7 +140,7 @@ public class EmployeeService {
     public Employee updateBlank(Employee employee) {
         
         LocalDateTime now = LocalDateTime.now();
-        employee.setCreatedAt(now);
+        //employee.setCreatedAt(now);
         employee.setUpdatedAt(now);
 
         return employeeRepository.save(employee);
