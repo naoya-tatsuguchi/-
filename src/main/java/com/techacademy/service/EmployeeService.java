@@ -143,9 +143,7 @@ public class EmployeeService {
         
         Employee employee_before = findByCode(code);
         String password_before = employee_before.getPassword();
-        String password_now = employee.getPassword();
-        
-        password_now = password_before;
+        employee.setPassword(password_before);
         
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime createTime = employee_before.getCreatedAt();
