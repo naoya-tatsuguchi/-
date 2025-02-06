@@ -1,5 +1,7 @@
 package com.techacademy.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,9 +40,12 @@ public class ReportController {
         if (userDetail.getEmployee().getRole() == Role.ADMIN) {
             model.addAttribute("ListSize", reportService.findAll().size());
             model.addAttribute("reportList", reportService.findAll());
-        } else {
-            model.addAttribute("ListSize", userDetail.getEmployee().getReportList().size());
-            model.addAttribute("reportList", userDetail.getEmployee().getReportList());
+        }
+        
+        if (userDetail.getEmployee().getRole() == Role.GENERAL) {
+           List<Report> loginUser = reportService.findByEmployee(userDetail.getEmployee()); 
+            model.addAttribute("ListSize", loginUser.size());
+            model.addAttribute("reportList", loginUser);
         }
         
         return "reports/list";

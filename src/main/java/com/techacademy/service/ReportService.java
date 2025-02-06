@@ -50,6 +50,14 @@ public class ReportService {
         }
         return reps;
         }
+    
+    public List<Report> findByEmployee(Employee employee) {
+        List<Report> rep = reportRepository.findByEmployee(employee);
+        if (rep.isEmpty()) {
+            return null;
+        }
+        return rep;
+        }
 
     // 従業員削除
     @Transactional
@@ -87,8 +95,7 @@ public class ReportService {
         Report existingReport = existingReportOpt.get();  //DBから取得した日報
 
         if(!existingReport.getReportDate().equals(report.getReportDate())){
-            //existingReport.setReportDate(report.getReportDate());
-            List<Report> DateChecks = findByReportDateAndEmployee(report.getReportDate(), report.getEmployee());
+            List<Report> DateChecks = findByReportDateAndEmployee(report.getReportDate(), existingReport.getEmployee());
             if(DateChecks != null) {
                 return ErrorKinds.DATECHECK_ERROR;
             }
